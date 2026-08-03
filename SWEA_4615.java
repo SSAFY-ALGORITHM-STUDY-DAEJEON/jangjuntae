@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Main
+public class Solution
 {
     static int[] dx = {-1, -1, -1, 0, 1, 1, 1, 0};
     static int[] dy = {-1, 0, 1, 1, 1, 0, -1, -1};
