@@ -1,0 +1,125 @@
+import java.io.*;
+import java.util.*;
+
+public class Main
+{
+    static BC[] bc;
+    static int[] dy = {0, -1, 0, 1, 0};
+    static int[] dx = {0, 0, 1, 0, -1};
+
+    static public class BC{
+        int y;
+        int x;
+        int c;
+        int p;
+
+        public BC(int y, int x, int c, int p){
+            this.y = y;
+            this.x = x;
+            this.c = c;
+            this.p = p;
+        }
+    }
+
+    static boolean check(int index, int y, int x) {
+        int dist = Math.abs(bc[index].y - y) + Math.abs(bc[index].x - x);
+
+        return dist <= bc[index].c;
+    }
+
+    static int charge(int ay, int ax, int by, int bx){
+        int max = 0;
+
+        for(int i = -1; i < bc.length; i++){
+            for(int j = -1; j < bc.length; j++){
+                int ap = 0;
+                int bp = 0;
+
+                if(i != -1){
+                    if(!check(i, ay, ax)){
+                        continue;
+                    }
+
+                    ap = bc[i].p;
+                }
+
+                if(j != -1){
+                    if(!check(j, by, bx)){
+                        continue;
+                    }
+
+                    bp = bc[j].p;
+                }
+
+                int sum;
+
+                if(i != -1 && i == j){
+                    sum = bc[i].p;
+                }
+                else{
+                    sum = ap + bp;
+                }
+
+                max = Math.max(max, sum);
+            }
+        }
+
+        return max;
+    }
+
+    public static void main(String args[]) throws Exception
+    {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+
+        int T = Integer.parseInt(br.readLine());
+
+        for(int t = 1; t <= T; t++){
+            st = new StringTokenizer(br.readLine());
+            int m = Integer.parseInt(st.nextToken());
+            int a = Integer.parseInt(st.nextToken());
+
+            int[] A = new int[m + 1];
+            int[] B = new int[m + 1];
+
+            st = new StringTokenizer(br.readLine());
+            A[0] = 0;
+            B[0] = 0;
+
+            for(int i = 1; i <= m; i++){
+                A[i] = Integer.parseInt(st.nextToken());
+            }
+
+            st = new StringTokenizer(br.readLine());
+            for(int i = 1; i <= m; i++){
+                B[i] = Integer.parseInt(st.nextToken());
+            }
+
+            bc = new BC[a];
+            for(int i = 0; i < a; i++){
+                st = new StringTokenizer(br.readLine());
+                int x = Integer.parseInt(st.nextToken());
+                int y = Integer.parseInt(st.nextToken());
+                int c = Integer.parseInt(st.nextToken());
+                int p = Integer.parseInt(st.nextToken());
+
+                bc[i] = new BC(y - 1, x - 1, c, p);
+            }
+
+            int answer = 0;
+
+            int ay = 0; int ax = 0; int by = 9; int bx = 9;
+
+            for(int i = 0; i <= m; i++){
+                ay += dy[A[i]];
+                ax += dx[A[i]];
+                by += dy[B[i]];
+                bx += dx[B[i]];
+
+                answer += charge(ay, ax, by, bx);
+            }
+
+            System.out.println("#" + t + " " + answer);
+        }
+    }
+}
